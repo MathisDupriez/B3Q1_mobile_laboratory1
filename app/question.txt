@@ -1,0 +1,87 @@
+Réponse au qeustion :
+Question 1
+  - Match_parent = adapté la taille en fonction du composant parent
+  - wrap_content = la la taile est adpaté en fonction de la taille necessaire au composant, donc elle ne prendra que la taille dont le composant à besoin.
+  - android:orientation = la ca donne le sens du container orizontale ou verticale
+  - android:text = permet de définir le text afficher dans un bouton, un label etc.
+question 2
+    Quel est le package de la classe button ?
+    - Widget ?
+    Donnez 5 autres classe de ce pacjage qui vont sont familères, par exemples des classes proches des classes JavaFx
+    - TextView
+    - EditText
+    - ImageView
+    - CheckBox
+    - RadioButton
+Question 3
+    Dans quelle classe est définit findViewById ?
+    - Dans la classe activity dans le package android.app problement situer dans appcompatacitvity
+    Quel est le type de son retour ?
+    -Returns
+     T 	a view with given ID if found, or null otherwise
+     https://developer.android.com/reference/android/app/Activity.html#findViewById(int)
+Question 4
+    Quel est le type d'éléement de View.OnClickListener ?
+    - une interface
+    Dans quelle package se trrouve cette élément ?
+    - Dans le package android.view.view(.OnClickListener)
+    https://developer.android.com/reference/android/view/View.OnClickListener.html
+
+Question 5
+    Quel est le package de la class log ?
+    - elle est dans le package android.util(.log)
+    Quelles sont les methodes disponible dans la class logs ?
+    - Assert Log.a
+    - debug Log.d
+        - avec 3 paramètre
+            - String tag
+            - String msg
+            - Throwable tr
+        - avec 2 paramètre
+            - String tag
+            - String msg
+    - Error Log.e
+    - info Log.i
+    - Verbose Log.v
+        - avec 3 paramètre
+            - String tag
+            - String msg
+            - Throwable tr
+        - avec 2 paramètre
+            - String tag
+            - String msg
+    - Warn Log.w
+        - avec 3 paramètre
+            - String tag
+            - String msg
+            - Throwable tr
+        - avec 2 paramètre
+            - String tag
+            - String msg
+        - avec 2 autres paramètres
+            - String tag
+            - Thowable tr
+    - getStackTraceString
+        - retourne la chaine "trace" d'erreur dans on recois un throwable (pas trop bien capter ca)
+        - doc : Handy function to get a loggable stack trace from a Throwable
+                If any of the throwables in the cause chain is an UnknownHostException, this returns an empty string.
+    - isLoggable
+        - tout est dans le nom je pense mais pas capter la docs
+        - doc : Checks to see whether or not a log for the specified tag is loggable at the specified level. The default level of any tag is set to INFO. This means that any level above and including INFO will be logged. Before you make any calls to a logging method you should check to see if your tag should be logged. You can change the default level by setting a system property: 'setprop log.tag.<YOUR_LOG_TAG> <LEVEL>' Where level is either VERBOSE, DEBUG, INFO, WARN, ERROR, or ASSERT. You can also create a local.prop file that with the following in it: 'log.tag.<YOUR_LOG_TAG>=<LEVEL>' and place that in /data/local.prop.
+    - println
+        - trois paramètre
+            - int priority
+            - String tag
+            - String msg
+    - Log.wtf (rigolo il appelle ca what a terrible failure)
+        - avec 3 paramètre
+            - String tag
+            - String msg
+            - Throwable tr
+        - avec 2 paramètre
+            - String tag
+            - String msg
+        - avec 2 autres paramètres
+            - String tag
+            - Thowable tr
+    https://developer.android.com/reference/android/util/Log
