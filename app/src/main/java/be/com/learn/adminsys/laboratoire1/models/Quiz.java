@@ -1,5 +1,6 @@
 package be.com.learn.adminsys.laboratoire1.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,7 +9,7 @@ import java.util.Random;
 
 import be.com.learn.adminsys.laboratoire1.R;
 
-public class Quiz {
+public class Quiz implements Serializable {
     private Question[] mQuestionBank;
     private int mCurrentIndex;
     private int mCurrentQuestion;

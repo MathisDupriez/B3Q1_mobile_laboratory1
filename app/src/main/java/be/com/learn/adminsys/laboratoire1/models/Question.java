@@ -1,6 +1,8 @@
 package be.com.learn.adminsys.laboratoire1.models;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable {
     private int mTextResId;
     private int mExplication;
     private Boolean mAnswerTrue;
