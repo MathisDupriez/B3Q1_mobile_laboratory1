@@ -19,6 +19,7 @@ public class ViewUtils implements Serializable {
     private final Button mFalseButton;
     private final Button mNextButton;
     private final Button mStarButton;
+    private final Button mCheatButton;
     private final TextView mQuestioTextView;
     private final TextView mExplanationTextView;
     private final TextView mScoreNumber;
@@ -28,14 +29,13 @@ public class ViewUtils implements Serializable {
     private final LinearLayout mStartControl;
     private final Context mContext;
 
-
     public ViewUtils(View rootView, Context context) {
         //button
         mTrueButton = rootView.findViewById(R.id.true_button);
         mFalseButton = rootView.findViewById(R.id.false_button);
         mNextButton = rootView.findViewById(R.id.next_button);
         mStarButton = rootView.findViewById(R.id.start_button);
-
+        mCheatButton = rootView.findViewById(R.id.cheat_button);
         //textView
         mQuestioTextView = rootView.findViewById(R.id.question_text_view);
         mExplanationTextView= rootView.findViewById(R.id.question_explication);
@@ -150,6 +150,7 @@ public class ViewUtils implements Serializable {
         void onFalseButtonClick();
         void onNextButtonClick();
         void onStartButtonClick();
+        void onCheatButtonClick();
     }
 
 
@@ -158,5 +159,6 @@ public class ViewUtils implements Serializable {
         mFalseButton.setOnClickListener(v -> listener.onFalseButtonClick());
         mNextButton.setOnClickListener(v -> listener.onNextButtonClick());
         mStarButton.setOnClickListener(v -> listener.onStartButtonClick());
+        mCheatButton.setOnClickListener(v -> listener.onCheatButtonClick());
     }
 }

@@ -1,6 +1,7 @@
 package be.com.learn.adminsys.laboratoire1.controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -57,6 +58,14 @@ public class MainActivity extends AppCompatActivity implements ViewUtils.ViewLis
     public void onStartButtonClick() {
         mQuiz.reStartQuiz();
         mViewController.onStartButtonClick(mQuiz.getCurrentQuestion(), mQuiz.getCurrentScore(), mQuiz.getProgress()+1);
+    }
+
+    @Override
+    public void onCheatButtonClick() {
+        Intent intent = new Intent(MainActivity.this, CheatActivity.class);
+        String explanation = getString(mQuiz.getCurrentExplanation());
+        intent.putExtra(CheatActivity.ANSWER_EXTRA,explanation);
+        startActivity(intent);
     }
 
     @Override
@@ -132,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements ViewUtils.ViewLis
 
 
 
+
+    //just for the exercise
     @Override
     protected void onStart() {
         super.onStart();
