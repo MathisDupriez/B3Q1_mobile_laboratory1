@@ -11,49 +11,69 @@ import be.com.learn.adminsys.laboratoire1.R;
 
 public class Quiz implements Serializable {
     private Question[] mQuestionBank;
+    private Question[] mChosenQuestion = new Question[10];
+    private Boolean doesThePlayerRespond = false;
     private int mCurrentIndex;
-    private int mCurrentQuestion;
     private int mCurrentScore;
-    private int[] mChosenQuestion = new int[10];
 
     public Quiz() {
         this.mCurrentIndex = 0;
         this.setQuestionBank();
         this.mCurrentScore = 0;
+        this.doesThePlayerRespond = false;
     }
 
     //function for the scoreboard
     public void addPoint(){
         mCurrentScore++;
     }
+
     public int getCurrentScore(){
         return mCurrentScore;
     }
+
     public void nextQuestion(){
         mCurrentIndex++;
-        mCurrentQuestion=mChosenQuestion[mCurrentIndex];
     }
+
     public int getProgress(){
         return mCurrentIndex;
     }
+    public int setProgress(int progress){
+        return mCurrentIndex = progress;
+    }
+
     public Boolean isLastQuestion(){
         return mCurrentIndex == mChosenQuestion.length-1;
     }
+
     public boolean isBeforeLastQuestion(){
         return mCurrentIndex == mChosenQuestion.length-2;
     }
+
     public int getCurrentQuestion(){
-        return mQuestionBank[mCurrentQuestion].getTextResId();
+        return mChosenQuestion[mCurrentIndex].getTextResId();
     }
+
     public int getCurrentExplanation(){
-        return mQuestionBank[mCurrentQuestion].getExplication();
+        return mChosenQuestion[mCurrentIndex].getExplication();
     }
+
     public Boolean isCurrentAnswerTrue(){
-        return mQuestionBank[mCurrentQuestion].isAnswerTrue();
+        return mChosenQuestion[mCurrentIndex].isAnswerTrue();
     }
+
+    public Boolean doesThePlayerRespond(){
+        return doesThePlayerRespond;
+    }
+    public void setDoesThePlayerRespond(Boolean doesThePlayerRespond){
+        this.doesThePlayerRespond = doesThePlayerRespond;
+    }
+
+
     public void reStartQuiz() {
         // Réinitialiser le tableau
-        mChosenQuestion = new int[mChosenQuestion.length];
+        mChosenQuestion = new Question[mChosenQuestion.length];
 
         Random rand = new Random();
 
@@ -97,13 +117,13 @@ public class Quiz implements Serializable {
 
         // Remplir le tableau mChosenQuestion avec les indices des questions sélectionnées
         for (int i = 0; i < selectedQuestions.size(); i++) {
-            mChosenQuestion[i] = Arrays.asList(mQuestionBank).indexOf(selectedQuestions.get(i));
+            mChosenQuestion[i] = selectedQuestions.get(i);
         }
 
         // Réinitialiser l'index des questions et la question courante
         mCurrentIndex = 0;
         mCurrentScore=0;
-        mCurrentQuestion = mChosenQuestion[mCurrentIndex];
+
     }
 
 

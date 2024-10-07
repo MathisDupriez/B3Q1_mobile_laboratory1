@@ -3,9 +3,9 @@ package be.com.learn.adminsys.laboratoire1.models;
 import java.io.Serializable;
 
 public class Question implements Serializable {
-    private int mTextResId;
-    private int mExplication;
-    private Boolean mAnswerTrue;
+    private final int mTextResId;
+    private final int mExplication;
+    private final Boolean mAnswerTrue;
 
     public Question(Boolean mAnswerTrue, int mTextResId,int mExplication) {
         this.mAnswerTrue = mAnswerTrue;

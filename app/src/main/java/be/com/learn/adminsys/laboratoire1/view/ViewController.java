@@ -1,158 +1,118 @@
 package be.com.learn.adminsys.laboratoire1.view;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import be.com.learn.adminsys.laboratoire1.R;
+import java.io.Serializable;
 
-public class ViewController {
-    private final Button mTrueButton;
-    private final Button mFalseButton;
-    private final Button mNextButton;
-    private final Button mStarButton;
-    private final TextView mQuestioTextView;
-    private final TextView mExplanationTextView;
-    private final Context mContext;
-    private final LinearLayout mGameControl;
-    private final LinearLayout mStartControl;
-    private final ProgressBar mProgressBar;
-    private final TextView mScoreNumber;
-    private final TextView mScoreText;
+import be.com.learn.adminsys.laboratoire1.models.UiState;
+
+public class ViewController implements Serializable {
+    private final ViewUtils mViewUtils;
 
     public ViewController(View rootView, Context context) {
         //button
-        mTrueButton = rootView.findViewById(R.id.true_button);
-        mFalseButton = rootView.findViewById(R.id.false_button);
-        mNextButton = rootView.findViewById(R.id.next_button);
-        mStarButton = rootView.findViewById(R.id.start_button);
-
-        //textView
-        mQuestioTextView = rootView.findViewById(R.id.question_text_view);
-        mExplanationTextView= rootView.findViewById(R.id.question_explication);
-        mScoreNumber = rootView.findViewById(R.id.scoreNumber);
-        mScoreText = rootView.findViewById(R.id.score_text);
-
-        //linearLayout
-        mGameControl = rootView.findViewById(R.id.game_control);
-        mStartControl = rootView.findViewById(R.id.start_control);
-
-        //other
-        mProgressBar = rootView.findViewById(R.id.progressBar);
-        mContext = context;
+        mViewUtils = new ViewUtils(rootView, context);
     }
 
-    // view for the Quiz things
-    public void setQuestionTextView(int question){
-        mQuestioTextView.setText(question);
+    //View event for start button
+    public void onStartButtonClick(int currentQuestion, int score, int progress) {
+        mViewUtils.setQuestionTextView(currentQuestion);
+        mViewUtils.disableStartControl();
+        mViewUtils.showGameControl();
+        mViewUtils.setScoreText(false);
+        mViewUtils.displayCurrentScore(score,progress);
     }
 
-    public void setNextButtonText(Boolean isLastQuestion){
-        if (isLastQuestion){
-            mNextButton.setText(R.string.stop_button);
+    //View Event for False and true button
+    public void switchColor(String color){
+        if(color.equals("green")){
+            mViewUtils.setGreenColor();
+        }else if(color.equals("red")){
+            mViewUtils.setRedColor();
         }else{
-            mNextButton.setText(R.string.next_button);
+            mViewUtils.setDefaultColor();
         }
     }
-    public void showAnswerResponse(Boolean correctAnswer) {
-        Toast toast;
 
-        if (correctAnswer) {
-            toast = Toast.makeText(mContext, R.string.good_answer, Toast.LENGTH_SHORT);
-        } else {
-            toast = Toast.makeText(mContext, R.string.bad_answer, Toast.LENGTH_SHORT);
-        }
+    public void onResponseButtonClick(int currentScore, int questionIndex, int currentExplanation, boolean isCurrentAnswerTrue) {
+        mViewUtils.displayCurrentScore(currentScore,questionIndex);
+        mViewUtils.showExplanation();
+        mViewUtils.setExplanationTextView(currentExplanation);
+        mViewUtils.disableResponseButton();
+        mViewUtils.showAnswerResponse(isCurrentAnswerTrue);
+    }
 
-        // Positionner le toast au centre de l'écran
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+
+    //View event for next button
+    public void onLastNextButtonClick() {
+        mViewUtils.showStartControl();
+        mViewUtils.disableGameControl();
+        mViewUtils.setProgress(0);
+        mViewUtils.setScoreText(true);
     }
     public void sayToThePlayerToRespond(){
-        Toast.makeText(mContext,R.string.please_respond,Toast.LENGTH_SHORT).show();
+        mViewUtils.sayToThePlayerToRespond();
+    }
+    public void switchToNextQuestion(Boolean isBeforeLastQuestion){
+        mViewUtils.disableExplanation();
+        mViewUtils.setDefaultColor();
+        mViewUtils.enableResponseButton();
+        //set the text of NextButton
+        mViewUtils.setNextButtonText(isBeforeLastQuestion);
+    }
+    public void setSecondQuestion(int currentQuestion, int progress){
+        mViewUtils.setQuestionTextView(currentQuestion);
+        mViewUtils.setProgress(progress);
     }
 
-    // display the current score
-    public void displayCurrentScore(int score,int CurrentQuestionNumber){
-        mScoreNumber.setText(String.format("%d/%d", score, CurrentQuestionNumber));
+
+
+    public void setListeners(ViewUtils.ViewListener listener){
+        mViewUtils.setListeners( listener);
     }
-    public void setScoreText(boolean isLastScore){
-        // put true is entry for display the lastGame text
-        // put false in entry for display the current Score text
-        if(isLastScore){
-            mScoreText.setText(R.string.last_game);
-        }else{
-            mScoreText.setText(R.string.score_text);
+
+    public void updateUi(UiState uiState) {
+        // Mettre à jour le texte de la question
+        mViewUtils.setQuestionTextView(uiState.currentQuestionResId()); // ID de ressource de la chaîne pour la question actuelle
+
+        // Mettre à jour le texte de l'explication
+        mViewUtils.setExplanationTextView(uiState.explanationResId()); // ID de ressource de l'explication actuelle
+
+        // Mettre à jour l'affichage du score
+        mViewUtils.displayCurrentScore(uiState.score(), uiState.currentQuestionNumber()); // Affichage du score
+        mViewUtils.setScoreText(uiState.isLastQuestion()); // Vérifie si c'est le dernier score
+        // Mettre à jour la progression de la barre de progression
+        mViewUtils.setProgress(uiState.progress()); // Progression actuelle
+
+        // Mettre à jour le texte du bouton "Suivant"
+        mViewUtils.setNextButtonText(uiState.isLastQuestion()); // Vérifie si c'est la dernière question
+
+        // Afficher ou masquer les contrôles du jeu en fonction de l'état du jeu
+        if (uiState.isGameStarted()) {
+            mViewUtils.showGameControl(); // Afficher les contrôles de jeu si le jeu a commencé
+            mViewUtils.disableStartControl(); // Masquer le menu de démarrage
+            mViewUtils.enableResponseButton(); // Activer les boutons de réponse
+
+            // Vérifie si le joueur a répondu à la question
+            if (uiState.doesThePlayerRespond()) {
+                // Ajuste la couleur de fond en fonction de la réponse correcte
+                if (uiState.isAnswerCorrect()) {
+                    mViewUtils.setGreenColor(); // Réponse correcte
+                } else {
+                    mViewUtils.setRedColor(); // Réponse incorrecte
+                }
+                mViewUtils.disableResponseButton();
+            } else {
+                mViewUtils.setDefaultColor(); // Réinitialiser la couleur si aucune réponse n'a été donnée
+            }
+        } else {
+            mViewUtils.showStartControl(); // Affiche le menu de démarrage
+            mViewUtils.disableGameControl(); // Masque les contrôles de jeu
+            mViewUtils.setDefaultColor(); // Réinitialiser la couleur
+            mViewUtils.disableResponseButton(); // Désactiver les boutons de réponse
         }
     }
-    //management of the progress bar
-    public void setProgress(int progress){
-        mProgressBar.setProgress(progress);
-    }
-
-    //view for the game control  thing
-    public void showGameControl(){
-        mGameControl.setVisibility(View.VISIBLE);
-    }
-    public void disableGameControl(){
-        mGameControl.setVisibility(View.GONE);
-    }
-
-    // view for the start menu thing
-    public void showStartControl(){
-        mStartControl.setVisibility(View.VISIBLE);
-        mQuestioTextView.setText(R.string.question_text);
-    }
-    public void disableStartControl(){
-        mStartControl.setVisibility(View.GONE);
-    }
-
-    // view for explanation thing
-    public void showExplanation(){
-        mExplanationTextView.setVisibility(View.VISIBLE);
-    }
-    public void disableExplanation(){
-        mExplanationTextView.setVisibility(View.INVISIBLE);
-    }
-    public void setExplanationTextView(int explanation){
-        mExplanationTextView.setText(explanation);
-    }
-    // manage the status of the game control button
-    public void disableResponseButton(){
-        mTrueButton.setEnabled(false);
-        mFalseButton.setEnabled(false);
-    }
-    public void enableResponseButton(){
-        mTrueButton.setEnabled(true);
-        mFalseButton.setEnabled(true);
-    }
-    // set the color by the reponse
-    public void setRedColor(){
-        mQuestioTextView.setBackgroundResource(R.drawable.border_background_red);
-    }
-    public void setGreenColor(){
-        mQuestioTextView.setBackgroundResource(R.drawable.border_background_green);
-    }
-    public void setDefaultColor(){
-        mQuestioTextView.setBackgroundResource(R.drawable.border_background);
-    }
-    //management of the listener interface
-    public interface ViewListener {
-        void onTrueButtonClick();
-        void onFalseButtonClick();
-        void onNextButtonClick();
-        void onStartButtonClick();
-    }
 
 
-    public void setListeners(ViewListener listener){
-        mTrueButton.setOnClickListener(v -> listener.onTrueButtonClick());
-        mFalseButton.setOnClickListener(v -> listener.onFalseButtonClick());
-        mNextButton.setOnClickListener(v -> listener.onNextButtonClick());
-        mStarButton.setOnClickListener(v -> listener.onStartButtonClick());
-    }
 }
