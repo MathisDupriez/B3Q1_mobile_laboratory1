@@ -1,5 +1,6 @@
 package be.com.learn.adminsys.laboratoire1.controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import be.com.learn.adminsys.laboratoire1.R;
 
 public class CheatActivity extends AppCompatActivity {
     public static final String ANSWER_EXTRA = "ANSWER_EXTRA";
+    public static final String EXTRA_ANSWER_SHOWN = "EXTRA_ANSWER_SHOWN";
     private String mAnswerIsTrue;
     private Button mShowAnswerButton;
     private TextView mAnswerTextView;
@@ -35,6 +37,9 @@ public class CheatActivity extends AppCompatActivity {
 
         mShowAnswerButton.setOnClickListener(v -> {
             mAnswerTextView.setText(mAnswerIsTrue);
+            Intent data = new Intent();
+            data.putExtra(EXTRA_ANSWER_SHOWN, true);
+            this.setResult(RESULT_OK, data);
         });
 
     }

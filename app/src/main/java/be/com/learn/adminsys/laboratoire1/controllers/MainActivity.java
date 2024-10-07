@@ -1,12 +1,16 @@
 package be.com.learn.adminsys.laboratoire1.controllers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -60,13 +64,7 @@ public class MainActivity extends AppCompatActivity implements ViewUtils.ViewLis
         mViewController.onStartButtonClick(mQuiz.getCurrentQuestion(), mQuiz.getCurrentScore(), mQuiz.getProgress()+1);
     }
 
-    @Override
-    public void onCheatButtonClick() {
-        Intent intent = new Intent(MainActivity.this, CheatActivity.class);
-        String explanation = getString(mQuiz.getCurrentExplanation());
-        intent.putExtra(CheatActivity.ANSWER_EXTRA,explanation);
-        startActivity(intent);
-    }
+
 
     @Override
     public void onTrueButtonClick() {
@@ -113,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements ViewUtils.ViewLis
         mQuiz.setDoesThePlayerRespond(false);
     }
 
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -123,6 +119,27 @@ public class MainActivity extends AppCompatActivity implements ViewUtils.ViewLis
         outState.putSerializable(QUIZ_INDEX, mQuiz);
         outState.putSerializable(VIEWCONTROLLER_INDEX, uiState);
     }
+
+    @Override
+    public void onCheatButtonClick() {
+        Intent intent = new Intent(MainActivity.this, CheatActivity.class);
+        String explanation = getString(mQuiz.getCurrentExplanation());
+        intent.putExtra(CheatActivity.ANSWER_EXTRA,explanation);
+        mGetContent.launch(intent);
+    }
+    private ActivityResultLauncher<Intent> mGetContent =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == Activity.RESULT_OK &&
+                                result.getData() != null) {
+                            Intent intent = result.getData();
+                            if(intent.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN,
+                                    false)) {
+                                Toast.makeText(this, R.string.answer_has_been_shown,
+                                        Toast.LENGTH_SHORT).show();
+                            } }
+                    });
+
     private UiState buildUiState() {
         return new UiState(
                 mQuiz.getCurrentQuestion(),                  // Identifiant de la question actuelle
@@ -136,10 +153,6 @@ public class MainActivity extends AppCompatActivity implements ViewUtils.ViewLis
                 mQuiz.doesThePlayerRespond()                 // Le joueur a-t-il répondu ?
         );
     }
-
-
-
-
 
 
     //just for the exercise

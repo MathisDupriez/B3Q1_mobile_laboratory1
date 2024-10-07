@@ -1,4 +1,7 @@
-### Réponse aux questions
+# Réponse aux questions
+
+
+## Laboratoire 1
 
 ### Question 1
 
@@ -128,3 +131,135 @@ tag:Nom du tag dans les logs
 ![Capture d’écran 2024-09-17 à 22.35.49.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/9be4ca09-5965-4a26-a80e-0f294f1cf24b/447c7918-8951-4b82-9e75-df638285c2c0/Capture_decran_2024-09-17_a_22.35.49.png)
 
 ### Référence officiel
+
+
+# Laboratoire 2 
+
+## Question 1 
+
+### 1. Lancement de l'application
+
+Lorsqu'on lance l'application, les méthodes suivantes sont appelées :
+
+- `onCreate()` : La méthode `onCreate()` est appelée une seule fois lorsque l'activité est créée.
+- `onStart()` : L'activité devient visible à l'utilisateur.
+- `onResume()` : L'activité est maintenant au premier plan, et l'utilisateur peut interagir avec elle.
+
+**Méthodes appelées :**
+
+- `onCreate()`
+- `onStart()`
+- `onResume()`
+
+---
+
+### 2. Quitter l'application (bouton Back après l'avoir lancée)
+
+Lorsque tu quittes l'application en appuyant sur le bouton "Retour" (Back), l'activité est détruite. Les méthodes suivantes sont appelées :
+
+- `onPause()` : L'activité n'est plus au premier plan.
+- `onStop()` : L'activité n'est plus visible.
+- `onDestroy()` : L'activité est détruite.
+
+**Méthodes appelées :**
+
+- `onPause()`
+- `onStop()`
+- `onDestroy()`
+
+---
+
+### 3. Changer d'application (avec le task manager)
+
+Lorsque tu changes d'application via le gestionnaire de tâches, l'activité passe en arrière-plan, mais elle n'est pas détruite. Les méthodes suivantes sont appelées :
+
+- `onPause()` : L'activité n'est plus au premier plan.
+- `onStop()` : L'activité n'est plus visible, mais elle reste en mémoire.
+
+**Méthodes appelées :**
+
+- `onPause()`
+- `onStop()`
+
+---
+
+### 4. Revenir à l'application (avec le task manager)
+
+Lorsque tu reviens à l'application après l'avoir mise en arrière-plan, les méthodes suivantes sont appelées :
+
+- `onRestart()` : Appelée lorsque l'activité est arrêtée et va être relancée.
+- `onStart()` : L'activité devient visible à nouveau.
+- `onResume()` : L'activité est à nouveau au premier plan et prête à interagir avec l'utilisateur.
+
+**Méthodes appelées :**
+
+- `onRestart()`
+- `onStart()`
+- `onResume()`
+
+---
+
+### 5. Rotation de l'appareil
+
+Lorsque tu effectues une rotation de l'appareil, Android détruit et recrée l'activité par défaut (sauf si tu as spécifié un comportement personnalisé). Les méthodes suivantes sont appelées :
+
+- `onPause()` : L'activité est en train de quitter le premier plan.
+- `onStop()` : L'activité n'est plus visible.
+- `onDestroy()` : L'activité est détruite.
+- `onCreate()` : Une nouvelle instance de l'activité est créée.
+- `onStart()` : L'activité devient visible à nouveau.
+- `onResume()` : L'activité est à nouveau au premier plan.
+
+**Méthodes appelées :**
+
+- `onPause()`
+- `onStop()`
+- `onDestroy()`
+- `onCreate()`
+- `onStart()`
+- `onResume()`
+
+## Question 2 :
+
+## Types d'éléments que l'on peut enregistrer dans un Bundle
+
+### Types primitifs
+
+Les types primitifs sont directement supportés par le `Bundle`. Voici une liste des types primitifs et leurs méthodes associées :
+
+- `int` : `putInt()`, `getInt()`
+- `long` : `putLong()`, `getLong()`
+- `boolean` : `putBoolean()`, `getBoolean()`
+- `double` : `putDouble()`, `getDouble()`
+- `float` : `putFloat()`, `getFloat()`
+- `char` : `putChar()`, `getChar()`
+- `byte` : `putByte()`, `getByte()`
+
+### Chaînes de caractères et tableaux
+
+- `String` : `putString()`, `getString()`
+- Tableaux de types primitifs : `putIntArray()`, `putFloatArray()`, etc.
+
+### Objets `Parcelable`
+
+Android supporte également des objets qui implémentent l'interface `Parcelable`. Cela permet de sérialiser des objets complexes et de les passer via un `Bundle`. Par exemple :
+
+- `putParcelable()`, `getParcelable()`
+- Pour une liste d'objets : `putParcelableArrayList()`, `getParcelableArrayList()`
+
+### Objets `Serializable`
+
+Les objets qui implémentent l'interface `Serializable` peuvent également être enregistrés dans un `Bundle`, mais l'utilisation de `Parcelable` est souvent préférée pour des raisons de performance. Méthodes :
+
+- `putSerializable()`, `getSerializable()`
+
+### Types spécifiques Android
+
+- `Bundle` : Un autre `Bundle` peut être imbriqué dans un `Bundle`. Méthodes : `putBundle()`, `getBundle()`
+- `SparseArray` : Type spécifique à Android pour des collections optimisées. Méthodes : `putSparseParcelableArray()`
+- `CharSequence` : `putCharSequence()`, `getCharSequence()`
+- `IBinder` : `putBinder()`, `getBinder()` (pour des services liés)
+
+## Réponse à la question 3 : Où est définie la méthode `getString(int)` ?
+
+La méthode `getString(int)` est définie dans la classe `Context`, qui est une classe de base en Android. Comme toutes les `Activity` héritent de `Context`, vous pouvez l'utiliser directement dans une activité pour récupérer une chaîne de caractères à partir des ressources.
